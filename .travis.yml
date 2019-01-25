@@ -1,5 +1,5 @@
 sudo: required
-service:
+services:
   - docker
 
 before_install:
@@ -11,9 +11,9 @@ after_success:
   - docker build -t jagsdevops/multi-fibo-nginx ./nginx
   - docker build -t jagsdevops/multi-fibo-server ./server
   - docker build -t jagsdevops/multi-fibo-worker ./worker
-# Login to docker CLI
+  # Login to docker CLI
   -echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-#push images to docker
+  # push images to docker
   - docker push jagsdevops/multi-fibo-client
   - docker push jagsdevops/multi-fibo-nginx
   - docker push jagsdevops/multi-fibo-server
