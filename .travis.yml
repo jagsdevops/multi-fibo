@@ -1,0 +1,22 @@
+sudo: required
+service:
+  - docker
+
+before_install
+  - docker build -t jagsdevops/multi-fibo-client-test -f ./client/Dockerfile.dev ./client
+script:
+  - docker run jagsdevops/multi-fibo-client-test npm test -- --coverage
+after_success:
+  - docker build -t jagsdevops/multi-fibo-client ./client
+  - docker build -t jagsdevops/multi-fibo-nginx ./nginx
+  - docker build -t jagsdevops/multi-fibo-server ./server
+  - docker build -t jagsdevops/multi-fibo-worker ./worker
+# Login to docker CLI
+  -echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+#push images to docker
+  - docker push jagsdevops/multi-fibo-client
+  - docker push jagsdevops/multi-fibo-nginx
+  - docker push jagsdevops/multi-fibo-server
+  - docker push jagsdevops/multi-fibo-worker
+
+    
